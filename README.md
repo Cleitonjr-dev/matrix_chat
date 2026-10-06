@@ -286,10 +286,19 @@ Criar sala, entrar/sair e aceitar/recusar convites não foram implementados — 
 
 ### 5.5 Experiência de interface
 
+**Funcionalidades:**
+
 - **Read receipts** ("visto por") e **indicador de digitação** — não implementados.
 - **Avatares** — não implementados (exigem resolver e baixar `mxc://`).
 - **Notificações push** — não implementadas.
 - **Editar perfil / presença** — não implementados.
+
+**Layout e design:**
+
+- **Responsividade** — o layout atual é funcional, mas rígido; evolução: sidebar de salas + painel de conversa adaptativo ao redimensionamento.
+- **Tema claro/escuro** — hoje apenas o tema claro padrão (`colorSchemeSeed`); evolução: modo escuro e personalização.
+- **Estados de UI** — empty states, skeletons de loading e retry nos estados de erro.
+- **Acessibilidade e atalhos** — contraste, tamanhos de fonte, navegação por teclado e atalhos como `Ctrl+K`.
 
 ### 5.6 Escala e eficiência
 
