@@ -202,7 +202,11 @@ flutter build windows --release
 
 ### Uso
 
-Informe o homeserver (ex.: `https://matrix.org`), usuário e senha. A lista de salas é exibida; selecione uma sala para ver o histórico e enviar mensagens. A sessão é restaurada automaticamente na próxima abertura, e "Sair" encerra a sessão.
+1. Crie uma conta em um homeserver Matrix (ex.: `https://app.element.io` com o servidor `matrix.org`), caso ainda não tenha uma — o app implementa apenas login, não cadastro.
+2. No app, informe o homeserver (ex.: `https://matrix.org`), o **nome de usuário (localpart)** sem o domínio (ex.: `cleitonjr`, não `@cleitonjr:matrix.org`) e a senha.
+3. A lista de salas é exibida; selecione uma sala para ver o histórico e enviar mensagens. A sessão é restaurada automaticamente na próxima abertura, e "Sair" encerra a sessão.
+
+> Precisa de uma conta de teste? Entre em contato com o autor, que fornecerá as credenciais.
 
 > ⚠️ Use uma **sala não criptografada** para os testes — a criptografia ponta-a-ponta não foi habilitada (ver §5).
 
