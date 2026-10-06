@@ -2,8 +2,8 @@ import '../../rust/api.dart' as bridge;
 import '../../rust/models.dart';
 
 class ChatRepository {
-  Future<List<Message>> getMessages(String roomId, {int limit = 30}) =>
-      bridge.getMessages(roomId: roomId, limit: limit);
+  Future<List<Message>> getMessages(String roomId) =>
+      bridge.getMessages(roomId: roomId);
 
   Future<void> sendMessage(
     String roomId,

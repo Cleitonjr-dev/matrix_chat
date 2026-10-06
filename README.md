@@ -58,6 +58,31 @@ A solução é dividida em duas partes, ligadas por uma ponte FFI:
 - O **Repository** abstrai as chamadas às bindings geradas pelo Flutter Rust Bridge.
 - Toda a lógica de comunicação com o Matrix fica isolada na camada Rust.
 
+### Estrutura de diretórios
+
+```
+lib/
+├─ main.dart
+└─ src/
+   ├─ app.dart
+   ├─ core/                 paths.dart · sync_events.dart
+   ├─ data/repositories/    auth_repository · rooms_repository · chat_repository
+   ├─ features/
+   │  ├─ auth/              login_page · auth_controller
+   │  ├─ rooms/             rooms_page · rooms_controller
+   │  └─ chat/              chat_page · chat_controller
+   └─ rust/                 api.dart · models.dart · frb_generated*.dart (bindings geradas)
+
+rust/
+├─ Cargo.toml
+└─ src/
+   ├─ lib.rs
+   ├─ api/                  mod.rs · simple.rs (funções `pub async fn`)
+   ├─ matrix/               mod.rs (sessão, salas, mensagens, sync)
+   ├─ models/               mod.rs (DTOs)
+   └─ frb_generated.rs      (gerado pelo codegen)
+```
+
 ---
 
 ## 2. Decisões técnicas
@@ -126,27 +151,36 @@ A API recente difere de versões anteriores. Destaques relevantes para este proj
 
 ## 3. Instruções de configuração e execução
 
-### Pré-requisitos
+### Pré-requisitos (obrigatórios para rodar)
 
-| Ferramenta | Versão utilizada |
-|---|---|
-| Flutter (stable, desktop habilitado) | 3.44.9 |
-| Rust (rustup) | 1.99.0 |
-| Flutter Rust Bridge (codegen) | 2.13.0 |
-| Visual Studio com "Desktop development with C++" | 2026 18.6 |
-| Git | 2.56.0 |
+| Ferramenta | Versão utilizada | Instalação |
+|---|---|---|
+| Flutter (stable, desktop habilitado) | 3.44.9 | [flutter.dev](https://docs.flutter.dev/get-started/install) |
+| Rust (rustup) | 1.99.0 | `winget install --id Rustlang.Rustup -e` (ou [rustup.rs](https://rustup.rs)) |
+| Visual Studio com "Desktop development with C++" | 2026 (18.x) | [visualstudio.microsoft.com](https://visualstudio.microsoft.com/downloads/) |
+| Git | 2.56.0 | `winget install --id Git.Git -e` |
 
+> Após instalar o Rust, **feche e reabra o terminal** para que `cargo`/`rustc` entrem no PATH.
 > O LLVM/clang não é necessário: o codegen do FRB 2.13 faz o parsing em Rust puro (via `cargo expand`).
+
+### Pré-requisitos (somente para desenvolver / regenerar bindings)
+
+O **Flutter Rust Bridge (codegen)** só é necessário para regenerar as bindings Dart após alterar a API em `rust/src/api/`. Para apenas rodar o app, as bindings já estão commitadas em `lib/src/rust/` — não é preciso instalar.
+
+```powershell
+cargo install flutter_rust_bridge_codegen --version 2.13.0
+```
+
+> A versão do codegen deve casar com a versão fixada no projeto (`flutter_rust_bridge: 2.13.0` em `pubspec.yaml` e `=2.13.0` em `rust/Cargo.toml`).
 
 ### Configuração
 
 ```powershell
-# 1. Instalar o gerador de bindings (uma vez)
-cargo install flutter_rust_bridge_codegen
-
-# 2. Instalar as dependências Dart
+# Instalar as dependências Dart
 flutter pub get
 ```
+
+> ⚠️ O primeiro build demora vários minutos: o `matrix-sdk` + `rustls` + SQLite são compilados a partir do código-fonte em Rust.
 
 ### Gerar as bindings (após alterar a API em `rust/src/api/`)
 
@@ -172,6 +206,15 @@ Informe o homeserver (ex.: `https://matrix.org`), usuário e senha. A lista de s
 
 > ⚠️ Use uma **sala não criptografada** para os testes — a criptografia ponta-a-ponta não foi habilitada (ver §5).
 
+### Dados persistidos em disco
+
+A sessão e o estado do `matrix-sdk` são gravados no diretório de suporte da aplicação (via `getApplicationSupportDirectory`), nos itens:
+
+- `matrix_store/` — store SQLite do `matrix-sdk` (histórico, estado de sync);
+- `session.json` — tokens e `device_id` da sessão (`MatrixSession`), usado na restauração.
+
+Apagar esses arquivos equivale a um *logout* local (a sessão no homeserver permanece até ser revogada via "Sair").
+
 ---
 
 ## 4. Testes
@@ -181,9 +224,12 @@ Informe o homeserver (ex.: `https://matrix.org`), usuário e senha. A lista de s
 cd rust
 cargo test
 
-# Dart
+# Dart (unidade e widget)
 cd ..
 flutter test
+
+# Dart (integração, requer um device desktop)
+flutter drive --driver=test_driver/integration_test.dart --target=integration_test/simple_test.dart -d windows
 
 # Análise estática
 flutter analyze
@@ -194,8 +240,9 @@ Cobertura:
 - **Rust** (`models`): *round-trip* de serialização JSON do DTO `Message`.
 - **Dart — ViewModel** (`auth_controller_test`): valida que o `AuthController` restaura `null` sem sessão e expõe a sessão após login, usando um `FakeAuthRepository` (sem tocar no FFI).
 - **Dart — widget** (`widget_test`): valida que a `LoginPage` renderiza os campos de autenticação, com o repositório sobrescrito.
+- **Dart — integração** (`integration_test/simple_test.dart`): inicia a biblioteca nativa (`RustLib.init`) e valida que a aplicação monta (`App`).
 
-> Os testes de ViewModel/widget usam `ProviderContainer`/`ProviderScope` com `overrides`, evitando carregar a biblioteca nativa no ambiente de teste.
+> Os testes de ViewModel/widget usam `ProviderContainer`/`ProviderScope` com `overrides`, evitando carregar a biblioteca nativa no ambiente de teste. Já o teste de integração carrega o FFI de verdade e, por isso, precisa de um device desktop.
 
 ---
 

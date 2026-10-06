@@ -7,48 +7,22 @@ import 'frb_generated.dart';
 import 'models.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-Future<SessionInfo> login({
-  required String homeserver,
-  required String username,
-  required String password,
-  required String storePath,
-  required String sessionPath,
-}) => RustLib.instance.api.crateApiLogin(
-  homeserver: homeserver,
-  username: username,
-  password: password,
-  storePath: storePath,
-  sessionPath: sessionPath,
-);
 
-Future<SessionInfo> restoreSession({
-  required String homeserver,
-  required String storePath,
-  required String sessionPath,
-}) => RustLib.instance.api.crateApiRestoreSession(
-  homeserver: homeserver,
-  storePath: storePath,
-  sessionPath: sessionPath,
-);
+            
 
-Future<List<RoomInfo>> listRooms() => RustLib.instance.api.crateApiListRooms();
+            Future<SessionInfo>  login({required String homeserver , required String username , required String password , required String storePath , required String sessionPath }) => RustLib.instance.api.crateApiLogin(homeserver: homeserver, username: username, password: password, storePath: storePath, sessionPath: sessionPath);
 
-Future<List<Message>> getMessages({
-  required String roomId,
-  required int limit,
-}) => RustLib.instance.api.crateApiGetMessages(roomId: roomId, limit: limit);
+Future<SessionInfo>  restoreSession({required String homeserver , required String storePath , required String sessionPath }) => RustLib.instance.api.crateApiRestoreSession(homeserver: homeserver, storePath: storePath, sessionPath: sessionPath);
 
-Future<void> sendMessage({
-  required String roomId,
-  required String text,
-  String? replyToEventId,
-}) => RustLib.instance.api.crateApiSendMessage(
-  roomId: roomId,
-  text: text,
-  replyToEventId: replyToEventId,
-);
+Future<List<RoomInfo>>  listRooms() => RustLib.instance.api.crateApiListRooms();
 
-Future<void> logout({required String sessionPath}) =>
-    RustLib.instance.api.crateApiLogout(sessionPath: sessionPath);
+Future<List<Message>>  getMessages({required String roomId }) => RustLib.instance.api.crateApiGetMessages(roomId: roomId);
 
-Stream<SyncEvent> startSync() => RustLib.instance.api.crateApiStartSync();
+Future<void>  sendMessage({required String roomId , required String text , String? replyToEventId }) => RustLib.instance.api.crateApiSendMessage(roomId: roomId, text: text, replyToEventId: replyToEventId);
+
+Future<void>  logout({required String sessionPath }) => RustLib.instance.api.crateApiLogout(sessionPath: sessionPath);
+
+Stream<SyncEvent>  startSync() => RustLib.instance.api.crateApiStartSync();
+
+            
+            

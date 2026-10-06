@@ -4,8 +4,6 @@ import '../../core/sync_events.dart';
 import '../../data/repositories/rooms_repository.dart';
 import '../../rust/models.dart';
 
-final roomsRepositoryProvider = Provider<RoomsRepository>((ref) => RoomsRepository());
-
 final roomsControllerProvider =
     AsyncNotifierProvider<RoomsController, List<RoomInfo>>(RoomsController.new);
 

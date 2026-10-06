@@ -6,101 +6,109 @@
 import 'frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-class Message {
-  final String eventId;
-  final String sender;
-  final String body;
-  final PlatformInt64 timestampMillis;
-  final String replyToEventId;
-  final String replyToBody;
 
-  const Message({
-    required this.eventId,
-    required this.sender,
-    required this.body,
-    required this.timestampMillis,
-    required this.replyToEventId,
-    required this.replyToBody,
-  });
+            
 
-  @override
-  int get hashCode =>
-      eventId.hashCode ^
-      sender.hashCode ^
-      body.hashCode ^
-      timestampMillis.hashCode ^
-      replyToEventId.hashCode ^
-      replyToBody.hashCode;
+            
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Message &&
-          runtimeType == other.runtimeType &&
-          eventId == other.eventId &&
-          sender == other.sender &&
-          body == other.body &&
-          timestampMillis == other.timestampMillis &&
-          replyToEventId == other.replyToEventId &&
-          replyToBody == other.replyToBody;
-}
+            class Message  {
+                final String eventId;
+final String sender;
+final String body;
+final PlatformInt64 timestampMillis;
+final String replyToEventId;
+final String replyToBody;
 
-class RoomInfo {
-  final String roomId;
-  final String name;
+                const Message({required this.eventId ,required this.sender ,required this.body ,required this.timestampMillis ,required this.replyToEventId ,required this.replyToBody ,});
 
-  const RoomInfo({required this.roomId, required this.name});
 
-  @override
-  int get hashCode => roomId.hashCode ^ name.hashCode;
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is RoomInfo &&
-          runtimeType == other.runtimeType &&
-          roomId == other.roomId &&
-          name == other.name;
-}
 
-class SessionInfo {
-  final String userId;
-  final String displayName;
 
-  const SessionInfo({required this.userId, required this.displayName});
+        @override
+        int get hashCode => eventId.hashCode^sender.hashCode^body.hashCode^timestampMillis.hashCode^replyToEventId.hashCode^replyToBody.hashCode;
 
-  @override
-  int get hashCode => userId.hashCode ^ displayName.hashCode;
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is SessionInfo &&
-          runtimeType == other.runtimeType &&
-          userId == other.userId &&
-          displayName == other.displayName;
-}
 
-class SyncEvent {
-  final String kind;
-  final String roomId;
-  final String body;
+        @override
+        bool operator ==(Object other) =>
+            identical(this, other) ||
+            other is Message &&
+                runtimeType == other.runtimeType
+                && eventId == other.eventId&& sender == other.sender&& body == other.body&& timestampMillis == other.timestampMillis&& replyToEventId == other.replyToEventId&& replyToBody == other.replyToBody;
 
-  const SyncEvent({
-    required this.kind,
-    required this.roomId,
-    required this.body,
-  });
+            }
 
-  @override
-  int get hashCode => kind.hashCode ^ roomId.hashCode ^ body.hashCode;
+class RoomInfo  {
+                final String roomId;
+final String name;
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is SyncEvent &&
-          runtimeType == other.runtimeType &&
-          kind == other.kind &&
-          roomId == other.roomId &&
-          body == other.body;
-}
+                const RoomInfo({required this.roomId ,required this.name ,});
+
+
+
+
+
+        @override
+        int get hashCode => roomId.hashCode^name.hashCode;
+
+
+
+        @override
+        bool operator ==(Object other) =>
+            identical(this, other) ||
+            other is RoomInfo &&
+                runtimeType == other.runtimeType
+                && roomId == other.roomId&& name == other.name;
+
+            }
+
+class SessionInfo  {
+                final String userId;
+final String displayName;
+
+                const SessionInfo({required this.userId ,required this.displayName ,});
+
+
+
+
+
+        @override
+        int get hashCode => userId.hashCode^displayName.hashCode;
+
+
+
+        @override
+        bool operator ==(Object other) =>
+            identical(this, other) ||
+            other is SessionInfo &&
+                runtimeType == other.runtimeType
+                && userId == other.userId&& displayName == other.displayName;
+
+            }
+
+class SyncEvent  {
+                final String kind;
+final String roomId;
+final String body;
+
+                const SyncEvent({required this.kind ,required this.roomId ,required this.body ,});
+
+
+
+
+
+        @override
+        int get hashCode => kind.hashCode^roomId.hashCode^body.hashCode;
+
+
+
+        @override
+        bool operator ==(Object other) =>
+            identical(this, other) ||
+            other is SyncEvent &&
+                runtimeType == other.runtimeType
+                && kind == other.kind&& roomId == other.roomId&& body == other.body;
+
+            }
+            

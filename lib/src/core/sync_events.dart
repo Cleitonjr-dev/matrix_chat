@@ -12,7 +12,7 @@ import '../rust/models.dart';
 /// mesmas notificações de atualização em tempo real.
 final syncEventsProvider = Provider<Stream<SyncEvent>>((ref) {
   final controller = StreamController<SyncEvent>.broadcast();
-  final rustStream = RoomsRepository().startSync();
+  final rustStream = ref.watch(roomsRepositoryProvider).startSync();
 
   final sub = rustStream.listen(
     controller.add,

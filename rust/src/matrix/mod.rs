@@ -162,7 +162,7 @@ pub async fn list_rooms() -> Result<Vec<RoomInfo>> {
     Ok(rooms)
 }
 
-pub async fn get_messages(room_id: String, _limit: u16) -> Result<Vec<Message>> {
+pub async fn get_messages(room_id: String) -> Result<Vec<Message>> {
     use std::collections::HashMap;
 
     let client = with_client()?;

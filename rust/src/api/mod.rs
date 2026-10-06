@@ -28,8 +28,8 @@ pub async fn list_rooms() -> anyhow::Result<Vec<RoomInfo>> {
     matrix::list_rooms().await
 }
 
-pub async fn get_messages(room_id: String, limit: u16) -> anyhow::Result<Vec<Message>> {
-    matrix::get_messages(room_id, limit).await
+pub async fn get_messages(room_id: String) -> anyhow::Result<Vec<Message>> {
+    matrix::get_messages(room_id).await
 }
 
 pub async fn send_message(
